@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
-
 DOMAIN = "super_productivity"
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 3876
-DEFAULT_SCAN_INTERVAL = timedelta(seconds=30)
+
+DEFAULT_SCAN_INTERVAL_SECONDS = 30
+MIN_SCAN_INTERVAL_SECONDS = 5
+MAX_SCAN_INTERVAL_SECONDS = 3600
 
 CONF_TOKEN = "token"
 CONF_SCAN_INTERVAL = "scan_interval"

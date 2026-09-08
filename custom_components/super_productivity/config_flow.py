@@ -7,9 +7,20 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import CONF_HOST, CONF_PORT
+from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.selector import (
+    NumberSelector,
+    NumberSelectorConfig,
+    NumberSelectorMode,
+)
 
 from .api import (
     SuperProductivityApiClient,
@@ -17,13 +28,30 @@ from .api import (
     SuperProductivityConnectionError,
     SuperProductivityError,
 )
-from .const import CONF_TOKEN, DEFAULT_HOST, DEFAULT_PORT, DOMAIN
+from .const import (
+    CONF_SCAN_INTERVAL,
+    CONF_TOKEN,
+    DEFAULT_HOST,
+    DEFAULT_PORT,
+    DEFAULT_SCAN_INTERVAL_SECONDS,
+    DOMAIN,
+    MAX_SCAN_INTERVAL_SECONDS,
+    MIN_SCAN_INTERVAL_SECONDS,
+)
 
 
 class SuperProductivityConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle the UI configuration flow."""
 
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: ConfigEntry,
+    ) -> SuperProductivityOptionsFlow:
+        """Return the options flow."""
+        return SuperProductivityOptionsFlow()
 
     async def _validate(self, data: Mapping[str, Any]) -> dict[str, str]:
         """Probe the API. Return a dict of errors (empty on success)."""
@@ -101,3 +129,36 @@ class SuperProductivityConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
             description_placeholders={"host": entry.data[CONF_HOST]},
         )
+
+
+class SuperProductivityOptionsFlow(OptionsFlow):
+    """Handle the options flow (poll interval)."""
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Manage the poll interval."""
+        if user_input is not None:
+            return self.async_create_entry(
+                data={
+                    CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL])
+                }
+            )
+
+        current = self.config_entry.options.get(
+            CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL_SECONDS
+        )
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_SCAN_INTERVAL, default=current): NumberSelector(
+                    NumberSelectorConfig(
+                        min=MIN_SCAN_INTERVAL_SECONDS,
+                        max=MAX_SCAN_INTERVAL_SECONDS,
+                        step=1,
+                        unit_of_measurement="s",
+                        mode=NumberSelectorMode.BOX,
+                    )
+                ),
+            }
+        )
+        return self.async_show_form(step_id="init", data_schema=schema)

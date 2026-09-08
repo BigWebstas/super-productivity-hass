@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from datetime import timedelta
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -16,7 +17,7 @@ from .api import (
     SuperProductivityAuthError,
     SuperProductivityError,
 )
-from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
+from .const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL_SECONDS, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,7 +39,11 @@ class SuperProductivityCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             _LOGGER,
             config_entry=entry,
             name=DOMAIN,
-            update_interval=DEFAULT_SCAN_INTERVAL,
+            update_interval=timedelta(
+                seconds=entry.options.get(
+                    CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL_SECONDS
+                )
+            ),
         )
         self.client = client
 

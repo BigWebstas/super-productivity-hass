@@ -44,6 +44,9 @@ directory and restart.
 If you regenerate the token in Super Productivity, Home Assistant raises a
 re-auth prompt — paste the new one.
 
+The poll interval (default 30 s, range 5–3600 s) is under the integration's
+**Configure** button.
+
 ## Entities
 
 | Entity | Type | Meaning |
@@ -81,7 +84,7 @@ from `GET http://127.0.0.1:3876/tasks` directly.
 - The API has no time-series/stats endpoint. "Time spent today" is summed from
   each of today's tasks using Home Assistant's local date as the day key, so it
   can be briefly off around midnight or if you use a custom start-of-day.
-- Read cadence is fixed at 30 s.
+- Default read cadence is 30 s (adjustable in options).
 
 ## Disclaimer
 

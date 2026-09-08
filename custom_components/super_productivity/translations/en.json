@@ -33,6 +33,19 @@
       "reauth_successful": "Re-authentication was successful."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Super Productivity options",
+        "data": {
+          "scan_interval": "Poll interval"
+        },
+        "data_description": {
+          "scan_interval": "How often to poll the Local REST API, in seconds."
+        }
+      }
+    }
+  },
   "entity": {
     "sensor": {
       "current_task": { "name": "Current task" },

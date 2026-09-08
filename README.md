@@ -22,7 +22,7 @@ Home Assistant.
 ### HACS (custom repository)
 
 1. HACS → ⋮ → **Custom repositories**.
-2. Add `https://github.com/jwebstas/super-productivity-hass`, category
+2. Add `https://github.com/BigWebstas/super-productivity-hass`, category
    **Integration**.
 3. Install **Super Productivity**, then restart Home Assistant.
 

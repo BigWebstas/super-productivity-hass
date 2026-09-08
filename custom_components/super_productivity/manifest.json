@@ -1,12 +1,12 @@
 {
   "domain": "super_productivity",
   "name": "Super Productivity",
-  "codeowners": ["@jwebstas"],
+  "codeowners": ["@BigWebstas"],
   "config_flow": true,
-  "documentation": "https://github.com/jwebstas/super-productivity-hass",
+  "documentation": "https://github.com/BigWebstas/super-productivity-hass",
   "integration_type": "service",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/jwebstas/super-productivity-hass/issues",
+  "issue_tracker": "https://github.com/BigWebstas/super-productivity-hass/issues",
   "requirements": [],
   "version": "0.1.0"
 }

@@ -9,6 +9,7 @@ Home Assistant.
 
 ## Requirements
 
+- Home Assistant **2026.3** or newer.
 - Super Productivity **desktop** app (the Local REST API is desktop only).
 - In Super Productivity: **Settings → Misc → enable the Local REST API**, then
   copy the **Access Token** shown there.

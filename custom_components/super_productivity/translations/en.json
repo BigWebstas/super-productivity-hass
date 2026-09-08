@@ -1,0 +1,137 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Super Productivity",
+        "description": "Enable the Local REST API in Super Productivity under Settings → Misc, then copy the access token shown there.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "token": "Access token"
+        },
+        "data_description": {
+          "host": "IP or hostname of the machine running Super Productivity.",
+          "port": "REST API port (fixed at 3876).",
+          "token": "Settings → Misc → Access Token."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Super Productivity",
+        "description": "The access token for {host} was rejected. Paste the current token from Settings → Misc → Access Token.",
+        "data": {
+          "token": "Access token"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect. Check the host, port, and that the Local REST API is enabled.",
+      "invalid_auth": "The access token was rejected.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This Super Productivity instance is already configured.",
+      "reauth_successful": "Re-authentication was successful."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_task": { "name": "Current task" },
+      "task_count": { "name": "Task count" },
+      "tasks_today_open": { "name": "Tasks today open" },
+      "tasks_today_done": { "name": "Tasks today done" },
+      "tasks_today_total": { "name": "Tasks today total" },
+      "time_spent_today": { "name": "Time spent today" },
+      "time_estimated_today": { "name": "Time estimated today" },
+      "focus_mode": {
+        "name": "Focus mode",
+        "state": {
+          "Flowtime": "Flowtime",
+          "Pomodoro": "Pomodoro",
+          "Countdown": "Countdown"
+        }
+      },
+      "focus_time_remaining": { "name": "Focus time remaining" }
+    },
+    "binary_sensor": {
+      "tracking": { "name": "Tracking" },
+      "focus_running": { "name": "Focus running" }
+    },
+    "button": {
+      "stop_tracking": { "name": "Stop tracking" }
+    }
+  },
+  "services": {
+    "start_task": {
+      "name": "Start task",
+      "description": "Set a task as the current task and start tracking time on it.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        },
+        "task_id": {
+          "name": "Task ID",
+          "description": "ID of the task to start."
+        }
+      }
+    },
+    "stop_task": {
+      "name": "Stop task",
+      "description": "Clear the current task and stop time tracking.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        }
+      }
+    },
+    "archive_task": {
+      "name": "Archive task",
+      "description": "Move a task (and its subtasks) to the archive.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        },
+        "task_id": {
+          "name": "Task ID",
+          "description": "ID of the task to archive."
+        }
+      }
+    },
+    "create_task": {
+      "name": "Create task",
+      "description": "Create a new task. Returns the created task.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        },
+        "title": {
+          "name": "Title",
+          "description": "Task title."
+        },
+        "project_id": {
+          "name": "Project ID",
+          "description": "Target project. Omit for the inbox."
+        },
+        "parent_id": {
+          "name": "Parent task ID",
+          "description": "Create as a subtask of this top-level task."
+        },
+        "tag_ids": {
+          "name": "Tag IDs",
+          "description": "Tag IDs to attach. Ignored for subtasks."
+        },
+        "notes": {
+          "name": "Notes",
+          "description": "Task notes."
+        },
+        "time_estimate": {
+          "name": "Time estimate",
+          "description": "Estimated duration in milliseconds."
+        }
+      }
+    }
+  }
+}

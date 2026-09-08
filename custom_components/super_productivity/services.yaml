@@ -1,0 +1,71 @@
+start_task:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: super_productivity
+    task_id:
+      required: true
+      example: "aB3xY7"
+      selector:
+        text:
+
+stop_task:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: super_productivity
+
+archive_task:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: super_productivity
+    task_id:
+      required: true
+      selector:
+        text:
+
+create_task:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: super_productivity
+    title:
+      required: true
+      example: "Buy milk"
+      selector:
+        text:
+    project_id:
+      required: false
+      selector:
+        text:
+    parent_id:
+      required: false
+      selector:
+        text:
+    tag_ids:
+      required: false
+      selector:
+        text:
+          multiple: true
+    notes:
+      required: false
+      selector:
+        text:
+          multiline: true
+    time_estimate:
+      required: false
+      example: 1800000
+      selector:
+        number:
+          min: 0
+          mode: box
+          unit_of_measurement: ms

@@ -45,9 +45,9 @@
       "focus_mode": {
         "name": "Focus mode",
         "state": {
-          "Flowtime": "Flowtime",
-          "Pomodoro": "Pomodoro",
-          "Countdown": "Countdown"
+          "flowtime": "Flowtime",
+          "pomodoro": "Pomodoro",
+          "countdown": "Countdown"
         }
       },
       "focus_time_remaining": { "name": "Focus time remaining" }

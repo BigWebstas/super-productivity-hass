@@ -139,8 +139,10 @@ SENSORS: tuple[SuperProductivitySensorDescription, ...] = (
         translation_key="focus_mode",
         icon="mdi:timer-play-outline",
         device_class=SensorDeviceClass.ENUM,
-        options=["Flowtime", "Pomodoro", "Countdown"],
-        value_fn=lambda d: d.get("focus", {}).get("mode"),
+        options=["flowtime", "pomodoro", "countdown"],
+        value_fn=lambda d: (
+            str(m).lower() if (m := d.get("focus", {}).get("mode")) else None
+        ),
         attributes_fn=lambda d: {
             "cycle": d.get("focus", {}).get("cycle"),
             "session_done": d.get("focus", {}).get("isSessionDone"),

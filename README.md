@@ -86,6 +86,12 @@ from `GET http://127.0.0.1:3876/tasks` directly.
   can be briefly off around midnight or if you use a custom start-of-day.
 - Default read cadence is 30 s (adjustable in options).
 
+## Credits
+
+The integration icon is the Super Productivity app icon
+([super-productivity/super-productivity](https://github.com/super-productivity/super-productivity),
+MIT, © 2018 Johannes Millan).
+
 ## Disclaimer
 
 Not affiliated with Super Productivity.

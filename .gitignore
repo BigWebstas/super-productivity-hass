@@ -10,3 +10,4 @@ venv/
 .idea/
 GEMINI.md
 CLAUDE.md
+.claude/

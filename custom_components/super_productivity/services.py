@@ -28,6 +28,7 @@ from .const import (
     ATTR_TITLE,
     DOMAIN,
     SERVICE_ARCHIVE_TASK,
+    SERVICE_COMPLETE_TASK,
     SERVICE_CREATE_TASK,
     SERVICE_START_TASK,
     SERVICE_STOP_TASK,
@@ -40,6 +41,9 @@ _START_TASK_SCHEMA = vol.Schema(
     {**_ENTRY_SCHEMA, vol.Required(ATTR_TASK_ID): cv.string}
 )
 _STOP_TASK_SCHEMA = vol.Schema(_ENTRY_SCHEMA)
+_COMPLETE_TASK_SCHEMA = vol.Schema(
+    {**_ENTRY_SCHEMA, vol.Required(ATTR_TASK_ID): cv.string}
+)
 _ARCHIVE_TASK_SCHEMA = vol.Schema(
     {**_ENTRY_SCHEMA, vol.Required(ATTR_TASK_ID): cv.string}
 )
@@ -100,6 +104,11 @@ def async_setup_services(hass: HomeAssistant) -> None:
         await _run(coordinator.client.async_stop_task())
         await coordinator.async_request_refresh()
 
+    async def _complete_task(call: ServiceCall) -> None:
+        coordinator = _get_coordinator(hass, call)
+        await _run(coordinator.client.async_complete_task(call.data[ATTR_TASK_ID]))
+        await coordinator.async_request_refresh()
+
     async def _archive_task(call: ServiceCall) -> None:
         coordinator = _get_coordinator(hass, call)
         await _run(coordinator.client.async_archive_task(call.data[ATTR_TASK_ID]))
@@ -129,6 +138,9 @@ def async_setup_services(hass: HomeAssistant) -> None:
     )
     hass.services.async_register(
         DOMAIN, SERVICE_STOP_TASK, _stop_task, schema=_STOP_TASK_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN, SERVICE_COMPLETE_TASK, _complete_task, schema=_COMPLETE_TASK_SCHEMA
     )
     hass.services.async_register(
         DOMAIN, SERVICE_ARCHIVE_TASK, _archive_task, schema=_ARCHIVE_TASK_SCHEMA

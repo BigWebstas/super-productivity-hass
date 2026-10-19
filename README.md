@@ -2,7 +2,7 @@
 
 Pulls task, time-tracking and Focus Mode data from a running
 [Super Productivity](https://super-productivity.com) desktop app through its
-**Local REST API**, and lets you start, stop, create and archive tasks from
+**Local REST API**, and lets you start, stop, create, complete and archive tasks from
 Home Assistant.
 
 `local_polling` — Home Assistant polls the API every 30 seconds.
@@ -72,6 +72,7 @@ The poll interval (default 30 s, range 5–3600 s) is under the integration's
 | `super_productivity.start_task` | `task_id` |
 | `super_productivity.stop_task` | – |
 | `super_productivity.create_task` | `title`, optional `project_id`, `parent_id`, `tag_ids`, `notes`, `time_estimate` (ms). Returns the created task |
+| `super_productivity.complete_task` | `task_id` |
 | `super_productivity.archive_task` | `task_id` |
 
 All services take an optional `config_entry_id` when more than one instance is

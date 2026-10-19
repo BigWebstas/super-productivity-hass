@@ -98,6 +98,20 @@
         }
       }
     },
+    "complete_task": {
+      "name": "Complete task",
+      "description": "Mark a task as done.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        },
+        "task_id": {
+          "name": "Task ID",
+          "description": "ID of the task to complete."
+        }
+      }
+    },
     "archive_task": {
       "name": "Archive task",
       "description": "Move a task (and its subtasks) to the archive.",

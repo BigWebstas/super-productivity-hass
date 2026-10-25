@@ -29,6 +29,7 @@ from .const import (
     ATTR_TITLE,
     DOMAIN,
     PRIORITIES,
+    PRIORITY_LEVELS,
     PRIORITY_NONE,
     SERVICE_ARCHIVE_TASK,
     SERVICE_COMPLETE_TASK,
@@ -145,7 +146,7 @@ def async_setup_services(hass: HomeAssistant) -> None:
         if ATTR_TIME_ESTIMATE in call.data:
             payload["timeEstimate"] = call.data[ATTR_TIME_ESTIMATE]
         if ATTR_PRIORITY in call.data:
-            payload["priority"] = call.data[ATTR_PRIORITY]
+            payload["priority"] = PRIORITY_LEVELS[call.data[ATTR_PRIORITY]]
 
         created = await _run(coordinator.client.async_create_task(payload))
         await coordinator.async_request_refresh()
@@ -155,7 +156,9 @@ def async_setup_services(hass: HomeAssistant) -> None:
     async def _update_task(call: ServiceCall) -> None:
         coordinator = _get_coordinator(hass, call)
         priority = call.data[ATTR_PRIORITY]
-        payload = {"priority": None if priority == PRIORITY_NONE else priority}
+        payload = {
+            "priority": None if priority == PRIORITY_NONE else PRIORITY_LEVELS[priority]
+        }
         await _run(
             coordinator.client.async_update_task(call.data[ATTR_TASK_ID], payload)
         )

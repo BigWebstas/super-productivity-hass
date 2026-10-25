@@ -41,6 +41,8 @@ ATTR_TIME_ESTIMATE = "time_estimate"
 ATTR_PARENT_ID = "parent_id"
 ATTR_PRIORITY = "priority"
 
-# Priority values the Local REST API accepts; "none" clears it (sent as null).
-PRIORITIES = ("high", "medium", "low")
+# Service-facing priority names and the numbers the Local REST API takes for
+# them; "none" clears it (sent as null).
+PRIORITY_LEVELS = {"high": 3, "medium": 2, "low": 1}
+PRIORITIES = tuple(PRIORITY_LEVELS)
 PRIORITY_NONE = "none"

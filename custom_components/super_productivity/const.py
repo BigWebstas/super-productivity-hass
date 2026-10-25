@@ -28,6 +28,7 @@ SERVICE_STOP_TASK = "stop_task"
 SERVICE_CREATE_TASK = "create_task"
 SERVICE_ARCHIVE_TASK = "archive_task"
 SERVICE_COMPLETE_TASK = "complete_task"
+SERVICE_UPDATE_TASK = "update_task"
 
 ATTR_CONFIG_ENTRY_ID = "config_entry_id"
 ATTR_TASK_ID = "task_id"
@@ -37,3 +38,8 @@ ATTR_TAG_IDS = "tag_ids"
 ATTR_NOTES = "notes"
 ATTR_TIME_ESTIMATE = "time_estimate"
 ATTR_PARENT_ID = "parent_id"
+ATTR_PRIORITY = "priority"
+
+# Priority values the Local REST API accepts; "none" clears it (sent as null).
+PRIORITIES = ("high", "medium", "low")
+PRIORITY_NONE = "none"

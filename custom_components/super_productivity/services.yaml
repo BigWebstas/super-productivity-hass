@@ -82,3 +82,35 @@ create_task:
           min: 0
           mode: box
           unit_of_measurement: ms
+    priority:
+      required: false
+      selector:
+        select:
+          translation_key: priority
+          options:
+            - high
+            - medium
+            - low
+
+update_task:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: super_productivity
+    task_id:
+      required: true
+      example: "aB3xY7"
+      selector:
+        text:
+    priority:
+      required: true
+      selector:
+        select:
+          translation_key: priority
+          options:
+            - high
+            - medium
+            - low
+            - none

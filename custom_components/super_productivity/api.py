@@ -27,6 +27,10 @@ class SuperProductivityAuthError(SuperProductivityError):
     """Raised when the access token is missing or wrong."""
 
 
+class SuperProductivityNotFoundError(SuperProductivityError):
+    """Raised when the API reports a task that does not exist."""
+
+
 class SuperProductivityApiClient:
     """Minimal async client for the desktop Local REST API."""
 
@@ -77,6 +81,10 @@ class SuperProductivityApiClient:
                     raise SuperProductivityAuthError(
                         _error_message(payload, "Access token rejected")
                     )
+                if _error_code(payload) == "TASK_NOT_FOUND":
+                    raise SuperProductivityNotFoundError(
+                        _error_message(payload, "Task not found")
+                    )
                 if resp.status >= 400 or not _is_ok(payload):
                     raise SuperProductivityError(
                         _error_message(payload, f"HTTP {resp.status} for {path}")
@@ -107,6 +115,10 @@ class SuperProductivityApiClient:
             params={"tagId": "TODAY", "includeDone": "true"},
         )
 
+    async def async_get_task(self, task_id: str) -> Any:
+        """Return one task by ID."""
+        return await self._request("GET", f"/tasks/{task_id}")
+
     async def async_start_task(self, task_id: str) -> Any:
         """Set a task as the current (tracked) task."""
         return await self._request("POST", f"/tasks/{task_id}/start")
@@ -135,6 +147,15 @@ class SuperProductivityApiClient:
 def _is_ok(payload: Any) -> bool:
     """True when the envelope reports success."""
     return isinstance(payload, dict) and payload.get("ok") is True
+
+
+def _error_code(payload: Any) -> str | None:
+    """Pull the machine-readable code out of an error envelope."""
+    if isinstance(payload, dict):
+        error = payload.get("error")
+        if isinstance(error, dict):
+            return error.get("code")
+    return None
 
 
 def _error_message(payload: Any, fallback: str) -> str:

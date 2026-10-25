@@ -32,6 +32,19 @@ complete_task:
       selector:
         text:
 
+get_task:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: super_productivity
+    task_id:
+      required: true
+      example: "aB3xY7"
+      selector:
+        text:
+
 archive_task:
   fields:
     config_entry_id:

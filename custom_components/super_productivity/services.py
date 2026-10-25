@@ -16,7 +16,7 @@ from homeassistant.core import (
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 
-from .api import SuperProductivityError
+from .api import SuperProductivityError, SuperProductivityNotFoundError
 from .const import (
     ATTR_CONFIG_ENTRY_ID,
     ATTR_NOTES,
@@ -33,6 +33,7 @@ from .const import (
     SERVICE_ARCHIVE_TASK,
     SERVICE_COMPLETE_TASK,
     SERVICE_CREATE_TASK,
+    SERVICE_GET_TASK,
     SERVICE_START_TASK,
     SERVICE_STOP_TASK,
     SERVICE_UPDATE_TASK,
@@ -46,6 +47,9 @@ _START_TASK_SCHEMA = vol.Schema(
 )
 _STOP_TASK_SCHEMA = vol.Schema(_ENTRY_SCHEMA)
 _COMPLETE_TASK_SCHEMA = vol.Schema(
+    {**_ENTRY_SCHEMA, vol.Required(ATTR_TASK_ID): cv.string}
+)
+_GET_TASK_SCHEMA = vol.Schema(
     {**_ENTRY_SCHEMA, vol.Required(ATTR_TASK_ID): cv.string}
 )
 _ARCHIVE_TASK_SCHEMA = vol.Schema(
@@ -157,6 +161,18 @@ def async_setup_services(hass: HomeAssistant) -> None:
         )
         await coordinator.async_request_refresh()
 
+    async def _get_task(call: ServiceCall) -> ServiceResponse:
+        coordinator = _get_coordinator(hass, call)
+        try:
+            task = await coordinator.client.async_get_task(call.data[ATTR_TASK_ID])
+        except SuperProductivityNotFoundError:
+            return {"found": False, "task": None}
+        except SuperProductivityError as err:
+            raise HomeAssistantError(
+                f"Super Productivity request failed: {err}"
+            ) from err
+        return {"found": True, "task": task}
+
     hass.services.async_register(
         DOMAIN, SERVICE_START_TASK, _start_task, schema=_START_TASK_SCHEMA
     )
@@ -171,6 +187,13 @@ def async_setup_services(hass: HomeAssistant) -> None:
     )
     hass.services.async_register(
         DOMAIN, SERVICE_UPDATE_TASK, _update_task, schema=_UPDATE_TASK_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_GET_TASK,
+        _get_task,
+        schema=_GET_TASK_SCHEMA,
+        supports_response=SupportsResponse.ONLY,
     )
     hass.services.async_register(
         DOMAIN,

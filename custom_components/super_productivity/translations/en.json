@@ -98,6 +98,20 @@
         }
       }
     },
+    "get_task": {
+      "name": "Get task",
+      "description": "Look up a task by ID. Returns found false when it no longer exists.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        },
+        "task_id": {
+          "name": "Task ID",
+          "description": "ID of the task to look up."
+        }
+      }
+    },
     "complete_task": {
       "name": "Complete task",
       "description": "Mark a task as done.",

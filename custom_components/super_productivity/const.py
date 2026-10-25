@@ -29,6 +29,7 @@ SERVICE_CREATE_TASK = "create_task"
 SERVICE_ARCHIVE_TASK = "archive_task"
 SERVICE_COMPLETE_TASK = "complete_task"
 SERVICE_UPDATE_TASK = "update_task"
+SERVICE_GET_TASK = "get_task"
 
 ATTR_CONFIG_ENTRY_ID = "config_entry_id"
 ATTR_TASK_ID = "task_id"

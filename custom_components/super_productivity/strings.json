@@ -112,6 +112,24 @@
         }
       }
     },
+    "update_task": {
+      "name": "Update task",
+      "description": "Change a task's priority.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Super Productivity instance",
+          "description": "Which configured instance to target. Optional when only one is set up."
+        },
+        "task_id": {
+          "name": "Task ID",
+          "description": "ID of the task to update."
+        },
+        "priority": {
+          "name": "Priority",
+          "description": "New priority. Use none to clear it."
+        }
+      }
+    },
     "archive_task": {
       "name": "Archive task",
       "description": "Move a task (and its subtasks) to the archive.",
@@ -157,7 +175,21 @@
         "time_estimate": {
           "name": "Time estimate",
           "description": "Estimated duration in milliseconds."
+        },
+        "priority": {
+          "name": "Priority",
+          "description": "Task priority. Omit for none."
         }
+      }
+    }
+  },
+  "selector": {
+    "priority": {
+      "options": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
+        "none": "None"
       }
     }
   }

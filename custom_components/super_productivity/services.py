@@ -21,17 +21,21 @@ from .const import (
     ATTR_CONFIG_ENTRY_ID,
     ATTR_NOTES,
     ATTR_PARENT_ID,
+    ATTR_PRIORITY,
     ATTR_PROJECT_ID,
     ATTR_TAG_IDS,
     ATTR_TASK_ID,
     ATTR_TIME_ESTIMATE,
     ATTR_TITLE,
     DOMAIN,
+    PRIORITIES,
+    PRIORITY_NONE,
     SERVICE_ARCHIVE_TASK,
     SERVICE_COMPLETE_TASK,
     SERVICE_CREATE_TASK,
     SERVICE_START_TASK,
     SERVICE_STOP_TASK,
+    SERVICE_UPDATE_TASK,
 )
 from .coordinator import SuperProductivityConfigEntry, SuperProductivityCoordinator
 
@@ -47,6 +51,7 @@ _COMPLETE_TASK_SCHEMA = vol.Schema(
 _ARCHIVE_TASK_SCHEMA = vol.Schema(
     {**_ENTRY_SCHEMA, vol.Required(ATTR_TASK_ID): cv.string}
 )
+_PRIORITY = vol.In(PRIORITIES)
 _CREATE_TASK_SCHEMA = vol.Schema(
     {
         **_ENTRY_SCHEMA,
@@ -58,6 +63,14 @@ _CREATE_TASK_SCHEMA = vol.Schema(
         vol.Optional(ATTR_TIME_ESTIMATE): vol.All(
             vol.Coerce(int), vol.Range(min=0)
         ),
+        vol.Optional(ATTR_PRIORITY): _PRIORITY,
+    }
+)
+_UPDATE_TASK_SCHEMA = vol.Schema(
+    {
+        **_ENTRY_SCHEMA,
+        vol.Required(ATTR_TASK_ID): cv.string,
+        vol.Required(ATTR_PRIORITY): vol.In((*PRIORITIES, PRIORITY_NONE)),
     }
 )
 
@@ -127,11 +140,22 @@ def async_setup_services(hass: HomeAssistant) -> None:
             payload["notes"] = call.data[ATTR_NOTES]
         if ATTR_TIME_ESTIMATE in call.data:
             payload["timeEstimate"] = call.data[ATTR_TIME_ESTIMATE]
+        if ATTR_PRIORITY in call.data:
+            payload["priority"] = call.data[ATTR_PRIORITY]
 
         created = await _run(coordinator.client.async_create_task(payload))
         await coordinator.async_request_refresh()
         task = cast(dict[str, Any], created or {})
         return {"id": task.get("id"), "task": task}
+
+    async def _update_task(call: ServiceCall) -> None:
+        coordinator = _get_coordinator(hass, call)
+        priority = call.data[ATTR_PRIORITY]
+        payload = {"priority": None if priority == PRIORITY_NONE else priority}
+        await _run(
+            coordinator.client.async_update_task(call.data[ATTR_TASK_ID], payload)
+        )
+        await coordinator.async_request_refresh()
 
     hass.services.async_register(
         DOMAIN, SERVICE_START_TASK, _start_task, schema=_START_TASK_SCHEMA
@@ -144,6 +168,9 @@ def async_setup_services(hass: HomeAssistant) -> None:
     )
     hass.services.async_register(
         DOMAIN, SERVICE_ARCHIVE_TASK, _archive_task, schema=_ARCHIVE_TASK_SCHEMA
+    )
+    hass.services.async_register(
+        DOMAIN, SERVICE_UPDATE_TASK, _update_task, schema=_UPDATE_TASK_SCHEMA
     )
     hass.services.async_register(
         DOMAIN,

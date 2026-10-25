@@ -123,6 +123,10 @@ class SuperProductivityApiClient:
         """Mark a task as done."""
         return await self._request("PATCH", f"/tasks/{task_id}", json={"isDone": True})
 
+    async def async_update_task(self, task_id: str, payload: dict[str, Any]) -> Any:
+        """Update fields on a task."""
+        return await self._request("PATCH", f"/tasks/{task_id}", json=payload)
+
     async def async_archive_task(self, task_id: str) -> Any:
         """Archive a task."""
         return await self._request("POST", f"/tasks/{task_id}/archive")

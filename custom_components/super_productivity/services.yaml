@@ -118,7 +118,7 @@ update_task:
       selector:
         text:
     priority:
-      required: true
+      required: false
       selector:
         select:
           translation_key: priority
@@ -127,3 +127,8 @@ update_task:
             - medium
             - low
             - none
+    tag_ids:
+      required: false
+      selector:
+        text:
+          multiple: true

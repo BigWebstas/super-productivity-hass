@@ -128,7 +128,7 @@
     },
     "update_task": {
       "name": "Update task",
-      "description": "Change a task's priority.",
+      "description": "Change a task's priority and/or tags.",
       "fields": {
         "config_entry_id": {
           "name": "Super Productivity instance",
@@ -141,6 +141,10 @@
         "priority": {
           "name": "Priority",
           "description": "New priority. Use none to clear it."
+        },
+        "tag_ids": {
+          "name": "Tag IDs",
+          "description": "Replace the task's tags with these IDs. Works on subtasks, which cannot be tagged at creation."
         }
       }
     },

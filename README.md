@@ -72,7 +72,7 @@ The poll interval (default 30 s, range 5–3600 s) is under the integration's
 | `super_productivity.start_task` | `task_id` |
 | `super_productivity.stop_task` | – |
 | `super_productivity.create_task` | `title`, optional `project_id`, `parent_id`, `tag_ids`, `notes`, `time_estimate` (ms), `priority` (`high`/`medium`/`low`). Returns the created task |
-| `super_productivity.update_task` | `task_id`, `priority` (`high`/`medium`/`low`/`none` to clear) |
+| `super_productivity.update_task` | `task_id`, plus `priority` (`high`/`medium`/`low`/`none` to clear) and/or `tag_ids` (replaces the task's tags; works on subtasks, which cannot be tagged at creation) |
 | `super_productivity.complete_task` | `task_id` |
 | `super_productivity.archive_task` | `task_id` |
 

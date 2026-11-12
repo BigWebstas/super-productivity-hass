@@ -75,7 +75,8 @@ _UPDATE_TASK_SCHEMA = vol.Schema(
     {
         **_ENTRY_SCHEMA,
         vol.Required(ATTR_TASK_ID): cv.string,
-        vol.Required(ATTR_PRIORITY): vol.In((*PRIORITIES, PRIORITY_NONE)),
+        vol.Optional(ATTR_PRIORITY): vol.In((*PRIORITIES, PRIORITY_NONE)),
+        vol.Optional(ATTR_TAG_IDS): vol.All(cv.ensure_list, [cv.string]),
     }
 )
 
@@ -155,10 +156,19 @@ def async_setup_services(hass: HomeAssistant) -> None:
 
     async def _update_task(call: ServiceCall) -> None:
         coordinator = _get_coordinator(hass, call)
-        priority = call.data[ATTR_PRIORITY]
-        payload = {
-            "priority": None if priority == PRIORITY_NONE else PRIORITY_LEVELS[priority]
-        }
+        payload: dict[str, Any] = {}
+        if ATTR_PRIORITY in call.data:
+            priority = call.data[ATTR_PRIORITY]
+            payload["priority"] = (
+                None if priority == PRIORITY_NONE else PRIORITY_LEVELS[priority]
+            )
+        if ATTR_TAG_IDS in call.data:
+            # Tags cannot be set when creating a subtask, but PATCH accepts them.
+            payload["tagIds"] = call.data[ATTR_TAG_IDS]
+        if not payload:
+            raise ServiceValidationError(
+                f"Provide {ATTR_PRIORITY} and/or {ATTR_TAG_IDS} to update"
+            )
         await _run(
             coordinator.client.async_update_task(call.data[ATTR_TASK_ID], payload)
         )
